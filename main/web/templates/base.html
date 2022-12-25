@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block styles %}
+    {% endblock styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <title>NotesApp</title>
+</head>
+<body>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-inner">
+                <div class="logo"><a href="{{ url_for('index') }}"><i class="fa-solid fa-dumbbell"></i> Дневник тренировок</a></div>
+                <nav>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{{ url_for('show_user_acc', user_id=user.user_id) }}">Личный кабинет</a></li>
+                            <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('login_page') }}">Войти</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div class="content">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        {% block footer %}
+        <footer>
+            <p>&#169 Sanya Company. Все права защищены</p>
+        </footer>
+        {% endblock footer %}
+    </div>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/article_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/change_article_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="main">
+    <form class="content-wrapper" method="POST">
+        <div class="article-content">
+            <div class="title"><input type="text" name="title" value="{{ article[1] }}"></div>
+            <div class="description">
+                <textarea name="description">{{ article[2] }}</textarea>
+            </div>
+        </div>
+        <div class="article-info">
+            <div class="author">
+                Автор статьи: <span><a href="">{{ article[4] }}</a></span>
+            </div>
+            <div class="date">
+                {{ article[3] }}
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="submit">Сохранить изменения</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

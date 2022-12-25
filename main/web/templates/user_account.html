@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/user_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="main">
+    <div class="card">
+        <h2>Личная информация</h2>
+        <div class="info">
+            <p>Фамилия: <span class="span-info">{{ user.info[3] }}</span></p>
+            <p>Имя: <span class="span-info">{{ user.info[1] }}</span></p>
+            <p>Отчество: <span class="span-info">{{ user.info[2] }}</span></p>
+            <p>Возраст: <span class="span-info">{{ user.info[5] }}</span></p>
+            <p>Стаж тренировок: <span class="span-info">{{ user.info[4] }}</span></p>
+            <p>Email: <span class="span-info">{{ user.info[6] }}</span></p>
+            <p>Тип: <span class="span-info">{{ user.info[7] }}</span></p>
+            {% if user.info[7] == "Новичок" %}
+                <p>Ваш тренер: 
+                    <span class="span-info">
+                        {% if user.trainer[0] %}
+                            <a href="{{ url_for('show_trainer', trainer_id=user.trainer[0]) }}">
+                                {{ user.trainer[1] }} {{ user.trainer[3] }}
+                            </a>
+                        {% else %}
+                            пока не выбран
+                        {% endif %}
+                    </span>
+                </p>
+            {% endif %}
+            <div class="buttons">
+                <a href="{{ url_for('show_my_notes', user_id=user.person_id) }}">Мои заметки</a>
+                {% if user.info[7] == "Тренер" %}
+                    <a href="{{ url_for('show_author_articles') }}">Мои статьи</a>
+                {% else %}
+                    <a href="{{ url_for('show_trainers') }}">Найти тренера</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,125 @@
+.content {
+    margin: 20px;
+}
+
+.main {
+    margin: 0 auto;
+    min-height: 100%;
+    border-radius: 5px;
+    background: #fff;
+    width: 65%;
+    font-size: 12px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.main h2 {
+    margin-bottom: 20px;
+    font-family: 'PT Serif', serif;
+    font-size: 2.2em;
+    border-bottom: 1px solid #d2d2d2;
+    padding-bottom: 5px;
+}
+
+.main .description {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1.5em;
+    white-space: pre-wrap;
+}
+
+.article-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.description p {
+    margin-top: 24px;
+}
+
+.article-info {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.article-info .author {
+    font-family: 'PT Serif', serif;
+}
+
+.author span {
+    font-weight: 400;
+    font-family: 'PT Sans', sans-serif;
+}
+
+.author a {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.author a:hover {
+    border-bottom: 1px solid black;
+}
+
+.article-info .date {
+    font-family: 'PT Sans', sans-serif;
+    color:rgb(130, 130, 130);
+}
+
+.buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.buttons a {
+    font-size: 1em;
+    text-decoration: none;
+    color: #000;
+    background: #fff;
+    font-family: 'PT Serif', serif;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: .2s;
+    border: 1px solid black;
+}
+
+.buttons a:hover {
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+@media(max-width: 768px) {
+    .main {
+        width: 100%;
+    }
+}
+
+@media(max-width: 565px) {
+    .main {
+        font-size: 10px;
+    }
+
+    .article-info {
+        flex-direction: column;
+    }
+}
+
+@media(max-width: 320px) {
+    .main {
+        font-size: 9px;
+    }
+}

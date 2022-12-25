@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/article_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/change_article_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/add_article_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="main">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="error">
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}   
+    <form class="content-wrapper" method="POST">
+        <div class="article-content">
+            <div class="title"><input type="text" name="title" placeholder="Название статьи"></div>
+            <div class="description">
+                <textarea name="description" placeholder="Описание статьи"></textarea>
+            </div>
+        </div>
+        <div class="article-info">
+        </div>
+        <div class="buttons">
+            <button type="submit">Добавить статью</button>
+            <div class="article-type">
+                <label for="">Выберите категорию статьи</label>
+                    <select name="article-type" id="">
+                        <option value="1">Питание</option>
+                        <option value="2">Тренировки</option>
+                        <option value="3">Полезное</option>
+                    </select>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}

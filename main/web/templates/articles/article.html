@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/articles/article_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="main">
+    <div class="content-wrapper">
+        <div class="article-content">
+            <h2>{{ article[1] }}</h2>
+            <div class="description">{{ article[2] }}</div>
+        </div>
+        <div class="article-info">
+            <div class="author">
+                Автор статьи: <span><a href="{{ url_for('show_trainer', trainer_id=author[0]) }}">{{ article[4] }}</a></span>
+            </div>
+            <div class="date">
+                {{ article[3] }}
+            </div>
+        </div>
+    </div>
+    {% if user.author == user.person_id %}
+        <div class="buttons">
+            <a href="{{ url_for('change_article', article_id=article[0]) }}">Изменить статью</a>
+            <a href="{{ url_for('delete_article', article_id=article[0]) }}">Удалить статью</a>
+        </div>
+    {% else %}
+        <div class="buttons" style="display: none;">
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

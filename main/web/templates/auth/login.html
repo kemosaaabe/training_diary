@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth/login_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Вход в систему</h2>
+        <form method="POST">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="error">
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <div class="field">
+                <input type="text" name="login" placeholder="Логин">
+            </div>
+            <div class="field">
+                <input type="password" name="password" placeholder="Пароль">
+                <div class="link">
+                    Еще нет аккаунта? <a href="{{ url_for('register_page') }}">Зарегестрироваться</a>
+                </div>
+            </div>
+            <div class="button">
+                <button>Войти</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,322 @@
+.content {
+    background: #F2F2F7;
+    border-top: 1px solid #c3c3c3;
+    font-size: 12px;
+}
+
+.content-wrapper {
+    display: flex;
+    height: 100%;
+}
+
+.folders {
+    flex: 1 0 auto;
+    border-right: 1px solid #d2d2d2;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.4em;
+    padding: 16px 24px;
+    width: 15%;
+    user-select: none;
+    position: relative;
+}
+
+.folder-icons {
+    position: absolute;
+    bottom: 16px;
+    right: 8px;
+    color: rgb(134, 134, 134);
+    display: flex;
+    gap: 10px;
+}
+
+.folder-icons i {
+    transition: .2s;
+    cursor: pointer;
+}
+
+.folder-icons i:hover {
+    color: #000;
+}
+
+.folders p {
+    font-family: 'PT Sans', sans-serif;
+    padding: 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.folders .author {
+    display: block;
+    color: #9c9c9c;
+    font-size: 0.8em;
+}
+
+.notes .author {
+    font-size: 0.8em;
+}
+
+.folders input {
+    color: #000;
+    background: #DEDEE4;
+    font-size: 1em;
+    border: none;
+    outline: none;
+    width: 80%;
+    font-family: 'PT Sans', sans-serif;
+}
+
+.folders .change-folder:focus {
+    border: none;
+    outline: none;
+}
+.active {
+    background: #DEDEE4;
+}
+
+.notes .blank {
+    font-family: 'PT Sans', sans-serif;
+    color: #a9a9a9;
+    text-align: center;
+    background: #F2F2F7;
+}
+
+.notes {
+    flex: 1 0 auto;
+    border-right: 1px solid #d2d2d2;
+    font-size: 1.4em;
+    padding: 16px;
+    user-select: none;
+    width: 20%;
+}
+
+.notes-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.notes p:first-child {
+    border-radius: 8px 8px 0px 0px;
+}
+
+.notes p:last-child {
+    border-radius: 0px 0px 8px 8px;
+}
+
+.notes p {
+    font-family: 'PT Sans', sans-serif;
+    padding: 10px;
+    border-bottom: 1px solid #d2d2d2;
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+    color: #b4b4b4;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;   
+}
+
+.notes .title {
+    font-weight: 700;
+    color: #000;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notes .short-description {
+    -webkit-line-clamp: 1; /* Число отображаемых строк */
+    display: -webkit-box; /* Включаем флексбоксы */
+    -webkit-box-orient: vertical; /* Вертикальная ориентация */
+    overflow: hidden;
+    font-size: 0.9em;
+}
+
+.notes .folder {
+    font-size: 0.9em;
+}
+
+.notes p:last-child {
+    border-bottom: none;
+}
+
+.note-edit .blank {
+    font-family: 'PT Sans', sans-serif;
+    color: #a9a9a9;
+    padding: 16px;
+    user-select: none;
+}
+
+.note-edit {
+    flex: 8 0 auto;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5em;
+    width: 65%;
+}
+
+.note-edit .note-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.note-header .icons-edit, .add-note {
+    position: absolute;
+    color: rgb(134, 134, 134);
+    transition: .2s;
+}
+
+.note-header .icons-edit {
+    left: 10px;
+    top: 5px;
+    display: flex;
+    gap: 10px;
+}
+
+.icons-edit .content-icons-edit {
+    display: flex;
+    gap: 10px;
+}
+
+.note-header .icons-edit i {
+    transition: .2s;
+    cursor: pointer;
+}
+
+.note-edit .basket-icons {
+    display: none;
+    gap: 10px;
+}
+
+.note-header .add-note {
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+}
+
+.note-header .add-note:hover, .icons-edit i:hover {
+    color: #000;
+}
+
+.note-header .date {
+    font-family: 'PT Sans', sans-serif;
+    color: #d2d2d2;
+    font-size: 0.8em;
+    padding-top: 5px;
+    user-select: none;
+}
+
+.note-edit .title input {
+    width: 100%;
+    border: none;
+    font-family: 'PT Serif', serif;
+    font-weight: 700;
+    font-size: 1.5em;
+    padding: 30px 10px 5px 30px;
+}
+
+.note-edit .title input:focus {
+    outline: none;
+    border: none;
+}
+
+.note-edit .description {
+    flex: 1 0 auto;
+    padding: 20px 10px 10px 30px;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1em;
+}
+
+.note-edit .form-note {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.note-edit .description textarea {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1em;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: none;
+    white-space: pre-wrap;
+}
+
+.note-edit .description textarea:focus {
+    border: none;
+    outline: none;
+}
+
+@media(max-width: 860px) {
+    .folders {
+        flex: 2 0 auto;
+        width: 20%;
+    }
+
+    .notes {
+        width: 20%;
+    }
+
+    .note-edit {
+        width: 60%;
+    }
+}
+
+@media(max-width: 768px) {
+    .folders {
+        width: 100%;
+        height: 150px;
+        overflow: auto;
+        border: none;
+        padding-top: 32px;
+    }
+
+    .folders p {
+        white-space: normal;
+        text-overflow: clip;
+        overflow: visible;
+    }
+
+    .folder-icons {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        color: rgb(134, 134, 134);
+        display: flex;
+        gap: 10px;
+    }
+
+    .notes {
+        flex: 0 0 auto;
+        width: 100%;
+        height: 150px;
+        overflow: auto;
+        border: none;
+        border-top: 1px solid #d2d2d2;
+        border-bottom: 1px solid #d2d2d2;
+    }
+
+    .note-edit {
+        flex: 6 0 auto;
+        width: 100%;
+        height: 100vh;
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+        min-height: 100%;
+    }
+}
+
+@media(max-width: 480px) {
+    .content {
+        font-size: 10px;
+    }
+}

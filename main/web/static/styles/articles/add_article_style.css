@@ -1,0 +1,47 @@
+.error {
+    align-self: flex-start;
+    font-size: 1.3em;
+    color: rgb(255, 76, 76);
+    font-family: 'PT Sans', sans-serif;
+    margin-bottom: 10px;
+}
+
+.flashes {
+    list-style-type: none;
+}
+
+.article-type {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.article-type label {
+    font-family: 'PT Serif', serif;
+    font-weight: 700;
+    font-size: 1.3em;
+}
+
+.article-type select {
+    font-size: 1.2em;
+    font-family: 'PT Sans', sans-serif;
+    padding: 2px 15px;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.article-type select:focus {
+    outline: none;
+}
+
+.buttons {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons button {
+    font-size: 1.3em;
+}
+

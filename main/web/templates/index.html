@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="main">
+    <h1>Статьи</h1>
+    <div class="wrapper">
+        {% for article in articles %}
+            <div class="article" data-link="{{ url_for('show_article', article_id=article[0]) }}">
+                <div class="main-info">
+                    <h3 class="category">{{ article[5] }}</h3>
+                    <h2 class="title">{{ article[1] }}</h2>
+                    <p class="short-description">{{ article[2] }}</p>
+                </div>
+                <div class="creation-date">{{ article[3] }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    let articles = document.querySelector('.wrapper');
+    for (let article of articles.children) {
+        console.log(article)
+        article.onclick = function() {
+            window.open(article.dataset.link, target='_self');
+        }
+    }
+</script>
+{% endblock content %}

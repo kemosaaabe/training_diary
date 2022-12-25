@@ -1,0 +1,468 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/notes/notes_style.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="folders">
+        <p class="active"><i class="fa-regular fa-folder"></i> Все заметки</p>
+        {% if folders %}
+            {% for folder in folders %}
+                <p data-folder_id="{{ folder[0] }}">
+                    <i class="fa-regular fa-folder"></i> <span class="folder-name">{{ folder[1] }}</span>
+                    <span class="author"><i class="fa-regular fa-user"></i> {{ folder[3] }}</span>
+                </p>
+            {% endfor %}
+        {% endif %}
+        <p id="basket" data-basket="true"><i class="fa-solid fa-trash trash"></i> Корзина</p>
+        <div class="folder-icons">
+            <i class="fa-solid fa-trash trash"></i>
+            <i class="fa-solid fa-folder-plus add"></i>
+        </div>
+    </div>
+    <div class="notes">
+        <div class="notes-wrapper">
+            {% if notes %}
+                {% for note in notes %}
+                    <p data-note_id="{{ note[0] }}">
+                        <span class="title">{{ note[1] }}</span>
+                        <span class="short-description">{{ note[2] }}</span>
+                        <span class="folder"><i class="fa-regular fa-folder"></i> {{ note[5] }}</span>
+                        <span class="author"><i class="fa-regular fa-user"></i> {{ note[4] }}</span>
+                    </p>
+                {% endfor %}
+            {% else %}
+                <div></div>
+                <div class="blank">Нет заметок</div>
+            {% endif %}
+        </div>
+    </div>
+    {% if notes %}
+    <div class="note-edit" data-note_id="{{ notes[0][0] }}">
+        <div class="note-header">
+            <div class="icons-edit">
+                <div class="content-icons-edit">
+                    <i class="fa-solid fa-trash trash"></i>
+                    <i class="fa-solid fa-floppy-disk save"></i>
+                </div>
+
+                <div class="basket-icons">
+                    <i class="fa-solid fa-trash basket-delete"></i>
+                    <i class="fa-solid fa-rotate-right restore"></i>
+                </div>
+            </div>
+            <div class="date">{{ notes[0][3] }}</div>
+            <div class="add-note"><i class="fa-solid fa-file-pen"></i></div>      
+        </div>
+        <form action="" class="form-note">
+            <div class="title"><input type="text" name="title" value="{{ notes[0][1] }}"></div>
+            <div class="description"><textarea name="description">{{ notes[0][2] }}</textarea></div>
+        </form>
+    </div>
+    {% else %}
+        <div class="note-edit">
+            <div class="note-header">
+                <div class="icons-edit">
+                    <div class="content-icons-edit">
+                        <i class="fa-solid fa-trash trash"></i>
+                        <i class="fa-solid fa-floppy-disk save"></i>
+                    </div>
+    
+                    <div class="basket-icons">
+                        <i class="fa-solid fa-trash basket-delete"></i>
+                        <i class="fa-solid fa-rotate-right restore"></i>
+                    </div>
+                </div>
+                <div class="add-note"><i class="fa-solid fa-file-pen"></i></div>      
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% block scripts %}
+<script>
+    const url = {{ url_for('show_my_notes', user_id=user.user_id)|tojson }};
+    let allNotes = {{ notes|tojson }};
+
+    let addFolderIcon = document.querySelector('.folders .folder-icons .add');
+    let deleteFolderIcon = document.querySelector('.folders .folder-icons .trash');
+
+    if (!allNotes.length) document.querySelector('.note-edit .icons-edit').style.display = 'none';
+
+    addFolderIcon.onclick = createFolder;
+    deleteFolderIcon.onclick = deleteFolder;
+
+    let foldersContainer = document.querySelector('.folders');
+    let userFolders = foldersContainer.children;
+    foldersContainer.onclick = folderOnClick;
+    foldersContainer.ondblclick = folderOnDblClick;
+
+    let basket = document.getElementById('basket');
+    basket.onclick = basketOnClick;
+
+    let noteDescription = document.querySelector('.note-edit textarea');
+    let noteTitle = document.querySelector('.note-edit .title input');
+    let saveIcon = document.querySelector('.note-edit .icons-edit .save');
+    let deleteIcon = document.querySelector('.note-edit .icons-edit .trash');
+    let addNote = document.querySelector('.note-edit .add-note i');
+
+    saveIcon.onclick = saveNote;
+    deleteIcon.onclick = deleteNote;
+    addNote.onclick = createNote;
+
+    let notesContainer = document.querySelector('.notes-wrapper');
+    let userNotes = notesContainer.children;
+    let initialNotes = notesContainer.innerHTML;
+
+    notesContainer.onclick = noteOnClick;
+
+    userNotes[0].classList.add('active');
+    if (userNotes.length == 1) {
+            userNotes[0].style.borderRadius = '8px';
+        }
+
+    foldersContainer.children[0].onclick = function() {
+        document.querySelector('.note-edit .icons-edit').style.display = 'block';
+        notesContainer.innerHTML = initialNotes;
+
+        let noteEdit = document.querySelector('.note-edit');
+        noteEdit.querySelector('.date').innerHTML = allNotes[0][3];
+        noteEdit.querySelector('.title input').value = allNotes[0][1];
+        noteEdit.querySelector('.description textarea').value = allNotes[0][2];
+
+        userNotes[0].classList.add('active');
+        if (userNotes.length == 1) {
+            userNotes[0].style.borderRadius = '8px';
+        }
+    }
+    async function createFolder() {
+        let addFolderData = new FormData();
+        addFolderData.append('addNewFolder', true);
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': addFolderData,
+        });
+
+        window.location.reload();
+    }
+
+    async function editFolder(folderId, value) {
+        console.log(folderId);
+        console.log(value);
+
+        let editFolderData = new FormData();
+        editFolderData.append('editFolder', folderId);
+        editFolderData.append('newFolderName', value)
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': editFolderData,
+        });
+
+        window.location.reload();
+    }
+
+    async function deleteFolder() {
+        let folderId;
+        
+        for (let folder of document.querySelector('.folders').children) {
+            if (folder.classList.contains('active')) folderId = folder.dataset.folder_id;
+        }
+
+        let deleteFolderData = new FormData();
+        deleteFolderData.append('deleteFolderId', folderId);
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': deleteFolderData,
+        });
+
+        window.location.reload();
+    }
+
+    async function createNote() {
+        let folderId;
+        
+        for (let folder of document.querySelector('.folders').children) {
+            if (folder.classList.contains('active')) folderId = folder.dataset.folder_id;
+        }
+
+        let addNoteData = new FormData();
+        addNoteData.append('addNewNoteId', folderId);
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': addNoteData,
+        });
+
+        window.location.reload();
+    }
+
+    async function deleteNote() {
+        let noteId = document.querySelector('.note-edit').dataset.note_id;
+        let deleteNoteData = new FormData();
+        deleteNoteData.append('deleteNoteId', noteId);
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': deleteNoteData,
+        });
+
+        window.location.reload();
+    }
+
+    async function saveNote() {
+        let noteDescription = document.querySelector('.note-edit textarea').value;
+        let noteTitle = document.querySelector('.note-edit .title input').value;
+        let noteId = document.querySelector('.note-edit').dataset.note_id;
+
+        let editNoteData = new FormData();
+        editNoteData.append('editNoteId', noteId);
+        editNoteData.append('editNoteTitle', noteTitle);
+        editNoteData.append('editNoteDesc', noteDescription);
+
+        let response = await fetch(url, {
+            'method': 'POST',
+            'body': editNoteData,
+        });
+
+        window.location.reload();
+    }
+
+    async function noteOnClick(event) {
+        let currentNote = event.target.closest('p');
+
+        if (userNotes.length == 1) {
+            userNotes[0].style.borderRadius = '8px';
+        }
+            
+        for (let note of userNotes) {
+            note.classList.remove('active');
+        }
+
+        currentNote.classList.add('active');
+
+        let noteData = new FormData();
+        noteData.append('note_id', currentNote.dataset.note_id);
+
+        let folderId = '';
+        for (let folder of document.querySelector('.folders').children) {
+            if (folder.classList.contains('active') && folder.dataset.basket) {
+                folderId = 'null';
+            };
+        }
+    
+        noteData.append('folderOfNote', folderId);
+
+        let response = await fetch(url, {
+            "method": "POST",
+            "body": noteData,
+        })
+
+        if (!response.ok) return;
+
+        let note = await response.json();
+        let noteEdit = document.querySelector('.note-edit');
+
+        noteEdit.querySelector('.date').innerHTML = note[0][3];
+        noteEdit.querySelector('.title input').value = note[0][1];
+        noteEdit.querySelector('.description textarea').value = note[0][2];
+        noteEdit.setAttribute('data-note_id', note[0][0]);
+    }
+
+    async function folderOnDblClick(event) {
+        let currentFolder = event.target.closest('p');
+        
+        if (currentFolder.dataset.folder_id === undefined) return;
+
+        currentFolder.innerHTML = `<i class="fa-regular fa-folder"></i>
+                        <input type='text' value='${currentFolder.querySelector('.folder-name').textContent.trim()}' 
+                        class='change-folder'>`
+        currentFolder.querySelector('input').focus();
+
+        currentFolder.querySelector('input').onblur = function(event) {
+            saveNewFolderName(currentFolder);
+        }
+
+        currentFolder.onkeydown = function(event) {
+            if (event.code == 'Enter') currentFolder.querySelector('input').blur();
+        }
+        
+        function saveNewFolderName(folder) {
+            folder.innerHTML = `<i class="fa-regular fa-folder"></i> ${folder.querySelector('input').value}`;
+
+            let folderId = folder.dataset.folder_id;
+            let value = folder.textContent.trim();
+
+            editFolder(folderId, value);
+        }
+        
+    }
+
+    async function folderOnClick(event) {
+        let currentFolder = event.target.closest('p');
+
+        for (let folder of userFolders) {
+            folder.classList.remove('active');
+        }
+
+        currentFolder.classList.add('active');
+
+        if (currentFolder.dataset.basket) {
+            document.querySelector('.note-edit .basket-icons').style.display = 'block';
+            document.querySelector('.note-edit .icons-edit .content-icons-edit').style.display = 'none';
+        }
+        else {
+            document.querySelector('.note-edit .basket-icons').style.display = 'none';
+            document.querySelector('.note-edit .icons-edit .content-icons-edit').style.display = 'flex';
+        }
+
+        if (currentFolder.dataset.folder_id === undefined) {
+            document.querySelector('.note-edit .add-note').style.display = 'none';
+            document.querySelector('.folders .folder-icons .trash').style.display = 'none';
+            return;
+        }
+        else {
+            document.querySelector('.note-edit .add-note').style.display = 'block';
+            document.querySelector('.folders .folder-icons .trash').style.display = 'block';
+        };
+
+        let folderData = new FormData();
+        folderData.append('folder_id', currentFolder.dataset.folder_id);
+
+        let response = await fetch(url, {
+                "method": "POST",
+                "body": folderData,
+            })
+            
+        if (!response.ok) return; 
+
+        notes = await response.json();
+        notesContainer.innerHTML = '';
+
+        let noteEdit = document.querySelector('.note-edit');
+        if (!notes.length) {
+            noteEdit.querySelector('.date').innerHTML = '';
+            noteEdit.querySelector('.title input').value = '';
+            noteEdit.querySelector('.description textarea').value = '';
+            noteEdit.querySelector('.icons-edit').style.display = 'none';
+
+            return;
+        }
+        else {
+            noteEdit.querySelector('.icons-edit').style.display = 'block';
+        }
+
+        for (let note of notes) {
+             notesContainer.insertAdjacentHTML('beforeend', `
+                <p data-note_id="${note[0]}">
+                    <span class="title">${note[1]}</span>
+                    <span class="short-description">${note[2]}</span>
+                    <span class="folder"><i class="fa-regular fa-folder"></i> ${note[5]}</span>
+                    <span class="author"><i class="fa-regular fa-user"></i> ${note[4]}</span>
+                </p>
+            `)
+        }
+
+        userNotes[0].classList.add('active');
+        if (userNotes.length == 1) {
+            userNotes[0].style.borderRadius = '8px';
+        }
+
+        noteEdit.querySelector('.date').innerHTML = notes[0][3];
+        noteEdit.querySelector('.title input').value = notes[0][1];
+        noteEdit.querySelector('.description textarea').value = notes[0][2];
+    }
+
+    async function basketOnClick(event) {
+        document.querySelector('.note-edit .icons-edit .basket-icons').style.display = 'block';
+        document.querySelector('.note-edit .icons-edit').style.display = 'block';
+        let basketData = new FormData();
+        basketData.append('basket', 'true');
+
+        let response = await fetch(url, {
+                "method": "POST",
+                "body": basketData,
+            })
+            
+        console.log(response);
+
+        if (!response.ok) return; 
+        
+        notes = await response.json();
+        let notesContainer = document.querySelector('.notes-wrapper');
+        notesContainer.innerHTML = '';
+        let noteEdit = document.querySelector('.note-edit');
+
+        if (!notes.length) {
+            noteEdit.querySelector('.date').innerHTML = '';
+            noteEdit.querySelector('.title input').value = '';
+            noteEdit.querySelector('.description textarea').value = '';
+            document.querySelector('.note-edit .icons-edit .basket-icons').style.display = 'none';
+            return;
+        }
+        else {
+            document.querySelector('.note-edit .icons-edit .basket-icons').style.display = 'block'; 
+        }
+
+        let restoreIcon = noteEdit.querySelector('.basket-icons .restore');
+        let basketIcon = noteEdit.querySelector('.basket-icons .basket-delete');
+
+        basketIcon.onclick = async function() {
+            let noteId = document.querySelector('.note-edit').dataset.note_id;
+            let destroyData = new FormData();
+            destroyData.append('destroyId', noteId);
+
+            let response = await fetch(url, {
+                    "method": "POST",
+                    "body": destroyData,
+            })
+            
+            window.location.reload();
+        }
+
+        restoreIcon.onclick = async function() {
+            let noteId = document.querySelector('.note-edit').dataset.note_id;
+            let restoreData = new FormData();
+            restoreData.append('restoreId', noteId);
+
+            let response = await fetch(url, {
+                    "method": "POST",
+                    "body": restoreData,
+            })
+            
+            window.location.reload();
+        }
+
+        for (let note of notes) {
+             notesContainer.insertAdjacentHTML('beforeend', `
+                <p data-note_id="${note[0]}">
+                    <span class="title">${note[1]}</span>
+                    <span class="short-description">${note[2]}</span>
+                    <span class="folder"><i class="fa-regular fa-folder"></i> ${note[5]}</span>
+                    <span class="author"><i class="fa-regular fa-user"></i> ${note[4]}</span>
+                </p>
+            `)
+        }
+
+        userNotes[0].classList.add('active');
+        if (userNotes.length == 1) {
+            userNotes[0].style.borderRadius = '8px';
+        }
+
+        noteEdit.dataset.note_id = notes[0][0];
+        noteEdit.querySelector('.date').innerHTML = notes[0][3];
+        noteEdit.querySelector('.title input').value = notes[0][1];
+        noteEdit.querySelector('.description textarea').value = notes[0][2];
+        
+    }
+
+</script>
+{% endblock scripts %}
